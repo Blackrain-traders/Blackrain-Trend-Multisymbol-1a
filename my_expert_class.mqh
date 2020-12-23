@@ -19,9 +19,13 @@ private:
    double            ADX_min;    //ADX Minimum value
    int               ADX_handle; //ADX Handle
    int               MA_handle;  //Moving Average Handle
+      int               EMA10_handle;  //Moving Average Handle
+      int               EMA20_handle;  //Moving Average Handle
    double            plus_DI[];  //array to hold ADX +DI values for each bars
    double            minus_DI[]; //array to hold ADX -DI values for each bars
    double            MA_val[];   //array to hold Moving Average values for each bars
+      double            EMA10_val[];   //array to hold Moving Average values for each bars
+      double            EMA20_val[];   //array to hold Moving Average values for each bars
    double            ADX_val[];  //array to hold ADX values for each bars
    double            Closeprice; //variable to hold the previous bar closed price 
    MqlTradeRequest   trequest;   //MQL5 trade request structure to be used for sending our trade requests
@@ -95,7 +99,8 @@ void MyExpert::showError(string msg,int ercode)
 void MyExpert::getBuffers()
   {
    if(CopyBuffer(ADX_handle,0,0,3,ADX_val)<0 || CopyBuffer(ADX_handle,1,0,3,plus_DI)<0
-      || CopyBuffer(ADX_handle,2,0,3,minus_DI)<0 || CopyBuffer(MA_handle,0,0,3,MA_val)<0)
+      || CopyBuffer(ADX_handle,2,0,3,minus_DI)<0 || CopyBuffer(MA_handle,0,0,3,MA_val)<0
+      || CopyBuffer(EMA10_handle,0,0,3,EMA10_val)<0 || CopyBuffer(EMA20_handle,0,0,3,EMA20_val)<0 )
      {
       Errormsg="Error copying indicator Buffers";
       Errcode = GetLastError();
@@ -155,8 +160,12 @@ void MyExpert::doInit(int adx_period,int ma_period)
    ADX_handle=iADX(symbol,period,adx_period);
 //--- get the handle for Moving Average indicator
    MA_handle=iMA(symbol,period,ma_period,0,MODE_EMA,PRICE_CLOSE);
+  //--- get the handle for Moving Average indicator
+    EMA10_handle=iMA(symbol,period,ma_period,0,MODE_EMA,PRICE_CLOSE);
+  //--- get the handle for Moving Average indicator
+    EMA20_handle=iMA(symbol,period,ma_period,0,MODE_EMA,PRICE_CLOSE);
 //--- what if handle returns Invalid Handle
-   if(ADX_handle<0 || MA_handle<0)
+   if(ADX_handle<0 || MA_handle<0 || EMA10_handle<0 || EMA20_handle<0 )
      {
       Errormsg="Error Creating Handles for indicators";
       Errcode=GetLastError();
@@ -183,6 +192,8 @@ void MyExpert::doUninit()
 //--- release our indicator handles
    IndicatorRelease(ADX_handle);
    IndicatorRelease(MA_handle);
+      IndicatorRelease(EMA10_handle);
+      IndicatorRelease(EMA20_handle);
   }
 
 
