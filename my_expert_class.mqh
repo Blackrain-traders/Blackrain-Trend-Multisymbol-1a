@@ -236,6 +236,8 @@ bool MyExpert::checkBuy()
 //+------------------------------------------------------------------+
 bool MyExpert::checkSell()
   {
+
+    
 /*
     Check for a Short/Sell Setup : MA decreasing downwards, 
     previous price close below MA, ADX > ADX min, -DI > +DI
